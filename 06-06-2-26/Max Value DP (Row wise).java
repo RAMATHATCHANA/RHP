@@ -22,8 +22,7 @@ public class Main {
         for (int row = 1; row < R; row++) {
             long fsmax[] = getFSMax(dp, row - 1, C);
             for (int col = 0; col < C; col++) {
-                dp[row][col] = grid[row][col] +
-                        (dp[row - 1][col] == fsmax[0] ? fsmax[1]: fsmax[0]);
+                dp[row][col] = grid[row][col] + (dp[row - 1][col] == fsmax[0] ? fsmax[1]: fsmax[0]);
             }
         }
         System.out.println(getFSMax(dp, R - 1, C)[0]);

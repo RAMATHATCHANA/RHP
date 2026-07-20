@@ -1,47 +1,61 @@
-class Solution {
-public:
-    const int diff[4][2] = {
-        {0, -1}, {0, 1},
-        {-1, 0}, {1, 0}
+import java.util.*;
+
+public class Main {
+
+    static int[][] dir = {
+        {0,-1},
+        {0,1},
+        {-1,0},
+        {1,0}
     };
 
-    int dfs(vector<vector<int>>& matrix,
-            vector<vector<int>>& dp,
-            int R, int C,
-            int row, int col) {
+    static int dfs(int[][] matrix, int[][] dp, int row, int col){
 
-        if (dp[row][col] != 0) {
+        if(dp[row][col] != 0)
             return dp[row][col];
-        }
-        int adjMax = 0;
-        for (int i = 0; i < 4; i++) {
 
-            int ar = row + diff[i][0];
-            int ac = col + diff[i][1];
+        int max = 0;
 
-            if (ar >= 0 && ar < R &&
-                ac >= 0 && ac < C &&
-                matrix[ar][ac] > matrix[row][col]) {
+        for(int[] d : dir){
 
-                adjMax = max(adjMax,
-                             dfs(matrix, dp, R, C, ar, ac));
+            int nr = row + d[0];
+            int nc = col + d[1];
+
+            if(nr>=0 && nr<matrix.length &&
+               nc>=0 && nc<matrix[0].length &&
+               matrix[nr][nc] > matrix[row][col]){
+
+                max = Math.max(max,
+                        dfs(matrix, dp, nr, nc));
             }
         }
-        dp[row][col] = 1 + adjMax;
+
+        dp[row][col] = 1 + max;
+
         return dp[row][col];
     }
 
-    int longestIncreasingPath(vector<vector<int>>& matrix) {
-        int R = matrix.size();
-        int C = matrix[0].size();
-        vector<vector<int>> dp(R, vector<int>(C, 0));
-        int maxLen = 1;
-        for (int row = 0; row < R; row++) {
-            for (int col = 0; col < C; col++) {
-                maxLen = max(maxLen, dfs(matrix, dp, R, C, row, col));
-            }
-        }
+    public static void main(String[] args){
 
-        return maxLen;
+        Scanner sc = new Scanner(System.in);
+
+        int R = sc.nextInt();
+        int C = sc.nextInt();
+
+        int[][] matrix = new int[R][C];
+
+        for(int i=0;i<R;i++)
+            for(int j=0;j<C;j++)
+                matrix[i][j]=sc.nextInt();
+
+        int[][] dp=new int[R][C];
+
+        int ans=1;
+
+        for(int i=0;i<R;i++)
+            for(int j=0;j<C;j++)
+                ans=Math.max(ans,dfs(matrix,dp,i,j));
+
+        System.out.println(ans);
     }
-};
+}
